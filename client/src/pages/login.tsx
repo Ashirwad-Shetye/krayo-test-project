@@ -5,9 +5,9 @@ import { SignIn } from "@clerk/nextjs";
 
 function Login() {
   return (
-    <>
-      <SignIn />
-    </>
+    <div>
+      <SignIn redirectUrl={"/"} />
+    </div>
   );
 }
 
