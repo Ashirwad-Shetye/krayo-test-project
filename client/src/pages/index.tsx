@@ -6,6 +6,8 @@ import Login from "./login";
 import Nav from "@/components/nav";
 import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Hero from "@/components/hero";
+import Uploader from "@/components/uploader";
+import Files from "@/components/files";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,7 +18,12 @@ export default function Home() {
     <main className="flex min-h-screen flex-col items-center justify-center">
       <Nav setSignIsOpen={setSignIsOpen} signIsOpen={signIsOpen} />
       {signIsOpen ? <Login /> : null}
-      <SignedIn></SignedIn>
+      <SignedIn>
+        <div className="w-full flex flex-col items-center justify-center space-y-10">
+          <Uploader />
+          <Files />
+        </div>
+      </SignedIn>
       <SignedOut>{signIsOpen ? null : <Hero />}</SignedOut>
     </main>
   );
