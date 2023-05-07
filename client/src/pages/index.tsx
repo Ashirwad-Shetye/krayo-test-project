@@ -14,12 +14,10 @@ export default function Home() {
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-center">
-      <Nav setSignIsOpen={setSignIsOpen} />
+      <Nav setSignIsOpen={setSignIsOpen} signIsOpen={signIsOpen} />
       {signIsOpen ? <Login /> : null}
       <SignedIn></SignedIn>
-      <SignedOut>
-        <Hero />
-      </SignedOut>
+      <SignedOut>{signIsOpen ? null : <Hero />}</SignedOut>
     </main>
   );
 }
