@@ -1,7 +1,9 @@
 "use client";
-import { UserButton, SignedIn, SignedOut } from "@clerk/nextjs";
+import { UserButton, SignedIn, SignedOut, useUser } from "@clerk/nextjs";
 
 function Nav({ setSignIsOpen, signIsOpen }: any) {
+  const { user } = useUser();
+  console.log(user);
   return (
     <header className="w-full absolute flex items-center top-0 z-10 h-20 border-b border-gray-300">
       <div className="flex items-center justify-between w-full h-full px-10">
