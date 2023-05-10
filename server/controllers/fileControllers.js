@@ -20,7 +20,7 @@ const uploadFile = asyncHandler(async (req, res) => {
 
 // GET - list files
 const getFiles = asyncHandler(async (req, res) => {
-  const userId = req.body.userId;
+  const userId = req.params.userId;
   const params = {
     Bucket: bucketName,
     Prefix: `${userId}/`,

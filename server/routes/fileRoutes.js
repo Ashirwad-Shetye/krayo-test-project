@@ -14,7 +14,7 @@ const {
   deleteFile,
 } = require("../controllers/fileControllers");
 
-router.get("/all", getFiles);
+router.get("/all/:userId", getFiles);
 
 router.post("/upload", upload.single("file"), uploadFile);
 
