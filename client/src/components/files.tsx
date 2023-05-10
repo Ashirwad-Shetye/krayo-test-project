@@ -8,7 +8,7 @@ import { ToastContainer, toast } from "react-toastify";
 function Files() {
   const { user } = useUser();
   const [userId, setUserId] = useState<string>("");
-  const [files, setFiles] = useState();
+  const [files, setFiles] = useState<any[]>([]);
   const keyRef = useRef();
 
   useEffect(() => {
