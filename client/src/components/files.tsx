@@ -70,7 +70,7 @@ function Files() {
         {!files ? (
           <div className="border-b border-slate-300/20 py-4 px-12 flex items-center justify-center">
             <h1 className="flex space-x-12">
-              Try refreshing files using the <span>Refresh</span> button
+              Try refreshing files using the Refresh button
             </h1>
           </div>
         ) : (
