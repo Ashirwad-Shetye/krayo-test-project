@@ -6,15 +6,15 @@ const upload = multer({
   storage: multerS3({
     s3: s3,
     bucket: bucketName,
-    contentType: multerS3.AUTO_CONTENT_TYPE,
-    acl: "private",
-    key: (req, file, cb) => {
-      const userId = req.params.userId;
-      const timestamp = Date.now().toString();
-      const originalname = file.originalname.replace(/\s+/g, "");
-      cb(null, `${userId}_${timestamp}_${originalname}`);
+    metadata: function (req, file, cb) {
+      cb(null, { fieldName: file.fieldname });
+    },
+    key: function (req, file, cb) {
+      cb(null, Date.now().toString() + "-" + file.originalname);
     },
   }),
 });
 
-module.exports = { upload };
+const storage = multer.memoryStorage();
+
+module.exports = { upload, storage };

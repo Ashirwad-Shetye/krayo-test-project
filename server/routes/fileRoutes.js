@@ -1,7 +1,11 @@
 const express = require("express");
 const router = express.Router();
+const multer = require("multer");
+const { s3UploadV2 } = require("../s3Service");
 
-const { upload } = require("../middleware/multer");
+const storage = multer.memoryStorage();
+
+const upload = multer({ storage, limits: { fileSize: 1000000000 } });
 
 const {
   uploadFile,
@@ -10,10 +14,12 @@ const {
   deleteFile,
 } = require("../controllers/fileControllers");
 
-router.route("/:userId", upload.single("file")).post(uploadFile);
+router.get("/all", getFiles);
 
-router.route("/:userId").get(getFiles);
+router.post("/upload", upload.single("file"), uploadFile);
 
-router.route("/:userId/:id").get(downloadFile).delete(deleteFile);
+router.get("/get", downloadFile);
+
+router.delete("/remove", deleteFile);
 
 module.exports = router;

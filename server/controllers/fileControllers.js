@@ -1,43 +1,53 @@
 const asyncHandler = require("express-async-handler");
 const { s3, bucketName } = require("../configs/s3");
+const { uploadToS3 } = require("../configs/s3");
+const {
+  ListObjectsV2Command,
+  GetObjectCommand,
+  DeleteObjectCommand,
+} = require("@aws-sdk/client-s3");
 
 // POST - upload file
 const uploadFile = asyncHandler(async (req, res) => {
-  res.status(200).json({
-    success: true,
-    message: "File uploaded successfully",
-    name: file.originalName,
-  });
+  const { file } = req;
+  const userId = req.body.userId;
+  const { error, key } = uploadToS3({ file, userId });
+  if (error) return res.status(500).json({ message: error.message });
+  if (!file || !userId)
+    return res.status(404).json({ error: "Invalid request" });
+  return res.status(201).json({ message: "File uploaded successfully", key });
 });
 
 // GET - list files
 const getFiles = asyncHandler(async (req, res) => {
-  const userId = req.params.userId;
-  const s3Params = {
+  const userId = req.body.userId;
+  const params = {
     Bucket: bucketName,
-    Prefix: `${userId}_`,
+    Prefix: `${userId}/`,
   };
-  const s3Objects = await s3.listObjectsV2(s3Params).promise();
-  const files = s3Objects.Contents.map(
-    (s3Object) => s3Object.Key.split(`${userId}_`)[1]
-  );
-  res.status(200).json({ success: true, files: files });
+
+  const command = new ListObjectsV2Command(params);
+  const response = await s3.send(command);
+
+  return res.status(200).json({ response });
 });
 
 // GET - download file
 const downloadFile = asyncHandler(async (req, res) => {
-  const key = req.params.id;
+  const folder = req.params.folder;
+  const filename = req.params.filename;
+  const key = `${filename}`;
 
-  const s3Params = {
+  const params = {
     Bucket: bucketName,
     Key: key,
   };
 
-  const s3Stream = s3.getObject(s3Params).createReadStream();
-  s3Stream.pipe(res);
-  res
+  const command = new GetObjectCommand(params);
+  const response = await s3.send(command);
+  return res
     .status(200)
-    .json({ success: true, message: "File downloaded successfully" });
+    .json({ success: true, response, message: "File downloaded successfully" });
 });
 
 // DELETE - delete file
