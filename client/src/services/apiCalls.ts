@@ -8,8 +8,8 @@ export const uploadFile = (params: any) => {
     });
 };
 
-export const getAllFile = (params: any) => {
-  return axios.post(`${process.env.BASE_URL}/api/file/all`, params);
+export const getAllFile = (userId: any) => {
+    return axios.get(`http://localhost:5000/api/file/all/${userId}`);
 };
 
 export const downloadFile = (params: any) => {

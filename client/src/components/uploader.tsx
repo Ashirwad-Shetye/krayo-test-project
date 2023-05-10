@@ -27,7 +27,6 @@ function Uploader() {
     if (response.status === 201) {
       toast.success(response.data.message);
     }
-    // console.log(response);
   };
 
   return (
