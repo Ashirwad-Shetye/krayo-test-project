@@ -12,8 +12,8 @@ export const getAllFile = (userId: any) => {
     return axios.get(`http://localhost:5000/api/file/all/${userId}`);
 };
 
-export const downloadFile = (params: any) => {
-  return axios.post(`${process.env.BASE_URL}/api/file/get`, params);
+export const downloadFile = (userId: any,key: any) => {
+  return axios.get(`http://localhost:5000/api/file/download/${userId}/${key}`);
 };
 
 export const deleteFile = (params: any) => {
