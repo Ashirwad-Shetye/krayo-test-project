@@ -8,6 +8,7 @@ import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Hero from "@/components/hero";
 import Uploader from "@/components/uploader";
 import Files from "@/components/files";
+import "react-toastify/dist/ReactToastify.css";
 
 const inter = Inter({ subsets: ["latin"] });
 

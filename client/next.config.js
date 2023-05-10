@@ -6,6 +6,15 @@ const nextConfig = {
       "658166146383-a8vflhb8rgo3tjhh7g4itn8fa63609s2.apps.googleusercontent.com",
     GOOGLE_CLIENT_SECRET: "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",
   },
+  headers: {
+    "Access-Control-Allow-Origin": "*",
+  },
+  api: {
+    bodyParser: {
+      sizeLimit: "5mb", // Set desired value here
+    },
+    responseLimit: false,
+  },
 };
 
 module.exports = nextConfig;
