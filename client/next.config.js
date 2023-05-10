@@ -7,7 +7,8 @@ const nextConfig = {
     GOOGLE_CLIENT_SECRET: "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",
   },
   headers: {
-    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Origin":
+      "krayo-test-project-production.up.railway.app",
   },
   api: {
     bodyParser: {
