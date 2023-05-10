@@ -20,7 +20,7 @@ export default function Home() {
       <Nav setSignIsOpen={setSignIsOpen} signIsOpen={signIsOpen} />
       {signIsOpen ? <Login /> : null}
       <SignedIn>
-        <div className="w-full flex flex-col items-center justify-center space-y-10">
+        <div className="w-full flex flex-col items-center justify-center space-y-8">
           <Uploader />
           <Files />
         </div>
