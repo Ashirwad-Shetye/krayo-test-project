@@ -6,6 +6,7 @@ const {
   GetObjectCommand,
   DeleteObjectCommand,
 } = require("@aws-sdk/client-s3");
+const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 const fs = require("fs");
 
 // POST - upload file
@@ -35,70 +36,28 @@ const getFiles = asyncHandler(async (req, res) => {
 
 // GET - download file
 const downloadFile = asyncHandler(async (req, res) => {
-  const { key } = req.params;
-  console.log(key);
-
+  const { userId, key } = req.params;
   const params = {
     Bucket: bucketName,
-    Key: key,
+    Key: `${userId}/${key}`,
   };
-  const fileStream = fs.createWriteStream(`/${key}.zip`);
   const command = new GetObjectCommand(params);
-  const downloadStream = s3.getObject(params).createReadStream();
-
-  // Set the content type of the response
-  res.setHeader("Content-Type", "application/octet-stream");
-
-  // Set the content disposition of the response to attachment
-  res.setHeader("Content-Disposition", "attachment; filename=largefile.zip");
-
-  // Pipe the download stream to the response
-  downloadStream.pipe(res);
-  // await s3
-  //   .send(command)
-  //   .createReadStream()
-  //   .on("error", function (err) {
-  //     console.log(err);
-  //   })
-  //   .on("data", function (chunk) {
-  //     fileStream.write(chunk);
-  //     return res.status(201).json({
-  //       success: true,
-  //       response,
-  //       message: "Initiating download",
-  //     });
-  //   })
-  //   .on("end", function () {
-  //     fileStream.end();
-  //     return res.status(200).json({
-  //       success: true,
-  //       response,
-  //       message: "File downloaded successfully",
-  //     });
-  //   });
+  const result = await getSignedUrl(s3, command, { expiresIn: 3600 });
+  res.status(200).json({ url: result });
 });
 
 // DELETE - delete file
 const deleteFile = asyncHandler(async (req, res) => {
-  const key = req.params.id;
-
-  const s3Params = {
+  const { userId, key } = req.params;
+  const params = {
     Bucket: bucketName,
-    Key: key,
+    Key: `${userId}/${key}`,
   };
 
-  s3.deleteObject(s3Params, (err, data) => {
-    if (err) {
-      console.error(err);
-      res
-        .status(500)
-        .json({ success: false, message: "Failed to delete file" });
-    } else {
-      res
-        .status(200)
-        .json({ success: true, message: "File deleted successfully" });
-    }
-  });
+  const command = new DeleteObjectCommand(params);
+
+  const result = await s3.send(command);
+  res.status(200).json({ message: "File deleted successfully", result });
 });
 
 module.exports = {
