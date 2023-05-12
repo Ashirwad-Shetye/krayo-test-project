@@ -1,7 +1,6 @@
 import { downloadFile, getAllFile } from "@/services/apiCalls";
 import { useUser } from "@clerk/nextjs";
-import axios from "axios";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { MdOutlineFileDownload, MdOutlineRefresh } from "react-icons/md";
 import { ToastContainer, toast } from "react-toastify";
 
@@ -9,13 +8,12 @@ function Files() {
   const { user } = useUser();
   const [userId, setUserId] = useState<string>("");
   const [files, setFiles] = useState<any[]>([]);
-  const keyRef = useRef();
 
   useEffect(() => {
     if (user) {
       setUserId(user?.id);
     }
-  }, [user, userId]);
+  }, [user]);
 
   const filterName = (str: string) => {
     return str.split("/")[1].split("-").splice(1).join("-");
@@ -30,9 +28,14 @@ function Files() {
   const handleRefresh = async () => {
     setSpin(true);
     const response = await getAllFile(userId);
-    const s3Files = response.data.response.Contents.reverse();
-    setFiles(s3Files);
-    setSpin(false);
+    if (response.data.response.KeyCount === 0) {
+      setSpin(false);
+      return toast("No files found");
+    } else {
+      const s3Files = response.data.response.Contents.reverse();
+      setFiles(s3Files);
+      setSpin(false);
+    }
   };
 
   const handleDownloadFile = async (data: any) => {

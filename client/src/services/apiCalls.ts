@@ -9,7 +9,7 @@ export const uploadFile = (params: any) => {
 };
 
 export const getAllFile = (userId: any) => {
-    return axios.get(`http://localhost:5000/file/all/${userId}`);
+    return axios.get(`http://localhost:5000/api/file/all/${userId}`);
 };
 
 export const downloadFile = (userId: any,key: any) => {
