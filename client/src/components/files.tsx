@@ -23,6 +23,10 @@ function Files() {
     return str.split("/")[1].split(" ").splice(1, 4).join(" ");
   };
 
+  const convertSize = (size: number) => {
+    return `${(size / 1000000).toFixed(2)} MB`;
+  };
+
   const [spin, setSpin] = useState(false);
 
   const handleRefresh = async () => {
@@ -83,9 +87,12 @@ function Files() {
               className="border-b border-slate-300/20 py-4 px-12 flex items-center justify-between hover:bg-white/10 duration-150"
             >
               <h1 className=" max-w-xl truncate">{filterName(file.Key)}</h1>
-              <div className="flex items-center justify-between space-x-20 w-72">
+              <div className="flex items-center justify-between space-x-20 w-fit">
                 <h2 className="text-gray-300 font-light tracking-wider">
                   {filterDate(file.Key)}
+                </h2>
+                <h2 className="text-gray-300 font-light tracking-wider">
+                  {convertSize(file.Size)}
                 </h2>
                 <button
                   onClick={() => handleDownloadFile(file.Key)}
