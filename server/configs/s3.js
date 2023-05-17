@@ -1,4 +1,3 @@
-// const AWS = require("aws-sdk");
 const { S3Client, PutObjectCommand } = require("@aws-sdk/client-s3");
 
 const s3 = new S3Client({
@@ -17,6 +16,7 @@ const uploadToS3 = async ({ file, userId }) => {
     Key: key,
     Body: file.buffer,
     ContentType: file.mimetype,
+    ContentDisposition: "attachment",
   });
   try {
     await s3.send(command);
